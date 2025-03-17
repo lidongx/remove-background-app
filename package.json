@@ -1,0 +1,15 @@
+{
+  "name": "removebg-app",
+  "version": "1.0.0",
+  "description": "Background removal web app",
+  "main": "index.html",
+  "scripts": {
+    "start": "vite"
+  },
+  "dependencies": {
+    "@imgly/background-removal": "^1.6.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+} 
