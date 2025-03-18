@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片背景移除工具</title>
+    <title>Online Background Removal Tool</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -110,15 +110,29 @@
         .error-message.active {
             display: block;
         }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>图片背景移除工具</h1>
+        <h1>Online Background Removal Tool</h1>
         
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click();">
-            <p>点击或拖拽图片到这里</p>
-            <p style="font-size: 0.8em; margin-top: 10px;">支持 PNG、JPEG、WebP 格式（最大 25MB）</p>
+            <p>Click or Drag Image Here</p>
+            <p style="font-size: 0.8em; margin-top: 10px;">Supports PNG, JPEG, WebP formats (Max 25MB)</p>
             <input type="file" 
                    id="fileInput" 
                    accept="image/*" 
@@ -129,17 +143,21 @@
         <div class="error-message" id="errorMessage"></div>
 
         <div class="loading" id="loading">
-            <p>正在处理图片，请稍候...</p>
+            <p>Processing image, please wait...</p>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
         </div>
 
         <div class="preview-container" id="previewContainer">
-            <h3>处理结果：</h3>
+            <h3>Result:</h3>
             <img id="resultImage" class="image-preview">
-            <button class="btn" id="downloadBtn" onclick="handleDownload()">下载图片</button>
+            <button class="btn" id="downloadBtn" onclick="handleDownload()">Download Image</button>
         </div>
+    </div>
+
+    <div class="footer">
+        <p>Contact: <a href="mailto:lidong@laien.io">lidong@laien.io</a></p>
     </div>
 
     <script type="module">
@@ -195,7 +213,7 @@
         function checkFileSize(file) {
             const maxSize = 25 * 1024 * 1024; // 25MB
             if (file.size > maxSize) {
-                throw new Error('文件大小不能超过 25MB');
+                throw new Error('File size cannot exceed 25MB');
             }
         }
 
@@ -236,7 +254,7 @@
                 previewContainer.classList.add('active');
             } catch (error) {
                 console.error('Error:', error);
-                showError('处理图片时出错：' + error.message);
+                showError('Error processing image: ' + error.message);
             } finally {
                 loading.classList.remove('active');
             }
