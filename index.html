@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Background Removal Tool - Free Online Service</title>
     <meta name="description" content="Free online AI-powered background removal tool. Remove backgrounds from images instantly using advanced artificial intelligence.">
+    <!-- Mixpanel -->
+    <script type="text/javascript">
+        (function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+        for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}var d={},e="get_group";for(h=0;h<j.length;h++)b(j[h]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+    </script>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -184,6 +189,14 @@
     <script type="module">
         import { removeBackground } from '@imgly/background-removal';
 
+        // 初始化 Mixpanel
+        mixpanel.init("377fc9d0637d4a7dbaf6df675ff79bae", {debug: false});
+        
+        // Track page view
+        mixpanel.track('Page View', {
+            'page': 'AI Background Removal Tool'
+        });
+
         // 获取元素
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
@@ -199,8 +212,18 @@
             if (file) {
                 try {
                     checkFileSize(file);
+                    // Track image upload event
+                    mixpanel.track('Image Upload', {
+                        'method': 'click',
+                        'file_type': file.type,
+                        'file_size': file.size
+                    });
                     await processImage(file);
                 } catch (error) {
+                    // Track error event
+                    mixpanel.track('Upload Error', {
+                        'error_message': error.message
+                    });
                     showError(error.message);
                 }
             }
@@ -223,8 +246,18 @@
             if (file && file.type.startsWith('image/')) {
                 try {
                     checkFileSize(file);
+                    // Track image upload event
+                    mixpanel.track('Image Upload', {
+                        'method': 'drag_and_drop',
+                        'file_type': file.type,
+                        'file_size': file.size
+                    });
                     await processImage(file);
                 } catch (error) {
+                    // Track error event
+                    mixpanel.track('Upload Error', {
+                        'error_message': error.message
+                    });
                     showError(error.message);
                 }
             }
@@ -259,6 +292,7 @@
                 errorMessage.classList.remove('active');
                 progress.style.width = '0%';
 
+                const startTime = Date.now();
                 const imageData = await file.arrayBuffer();
                 const blob = new Blob([imageData], { type: file.type });
 
@@ -269,11 +303,26 @@
                     }
                 });
 
+                const processingTime = Date.now() - startTime;
+
+                // Track successful processing
+                mixpanel.track('Image Processing Complete', {
+                    'processing_time_ms': processingTime,
+                    'file_type': file.type,
+                    'file_size': file.size
+                });
+
                 currentUrl = URL.createObjectURL(resultBlob);
                 currentFile = file;
                 resultImage.src = currentUrl;
                 previewContainer.classList.add('active');
             } catch (error) {
+                // Track processing error
+                mixpanel.track('Processing Error', {
+                    'error_message': error.message,
+                    'file_type': file.type,
+                    'file_size': file.size
+                });
                 console.error('Error:', error);
                 showError('Error processing image: ' + error.message);
             } finally {
@@ -284,6 +333,12 @@
         // 下载处理后的图片
         window.handleDownload = () => {
             if (currentUrl && currentFile) {
+                // Track download event
+                mixpanel.track('Image Download', {
+                    'file_type': currentFile.type,
+                    'file_size': currentFile.size
+                });
+                
                 const a = document.createElement('a');
                 a.href = currentUrl;
                 a.download = `removed_bg_${currentFile.name}`;
