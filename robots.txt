@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://remove-background-app.pages.dev/sitemap.xml 
