@@ -11,7 +11,14 @@ export default {
     // 压缩选项
     minify: 'terser',
     // 清空输出目录
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        about: resolve(__dirname, 'sitemap.xml'),
+        contact: resolve(__dirname, 'robots.txt')
+        // 可以继续添加更多页面
+      }
   },
 
   // 服务器配置
