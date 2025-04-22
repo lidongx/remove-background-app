@@ -1,4 +1,6 @@
 
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 export default {
   // 基本公共路径
