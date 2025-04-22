@@ -1,3 +1,5 @@
+
+
 export default {
   // 基本公共路径
   base: '/',
@@ -16,7 +18,9 @@ export default {
       input: {
         main: resolve(__dirname, 'index.html'),
         about: resolve(__dirname, 'sitemap.xml'),
-        contact: resolve(__dirname, 'robots.txt')
+        contact: resolve(__dirname, 'robots.txt'),
+        help: resolve(__dirname, 'googleff03b3026faa6312.html')
+
         // 可以继续添加更多页面
       }
   },
