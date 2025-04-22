@@ -1,35 +1,34 @@
-
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import fs from 'fs'
 
-export default {
-  // 基本公共路径
+export default defineConfig({
   base: '/',
-  
-  // 构建配置
   build: {
-    // 输出目录
     outDir: 'dist',
-    // 生成 sourcemap
     sourcemap: false,
-    // 压缩选项
     minify: 'terser',
-    // 清空输出目录
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        about: resolve(__dirname, 'sitemap.xml'),
-        contact: resolve(__dirname, 'robots.txt'),
-        help: resolve(__dirname, 'googleff03b3026faa6312.html')
-
-        // 可以继续添加更多页面
+        main: resolve(__dirname, 'index.html')
       }
+    }
   },
-
-  // 服务器配置
   server: {
     port: 3000,
     open: true
-  }
-} 
+  },
+  // 自定义构建钩子，把静态文件复制过去
+  plugins: [
+    {
+      name: 'copy-static-files',
+      buildEnd() {
+        const filesToCopy = ['sitemap.xml', 'robots.txt',"googleff03b3026faa6312.html"]
+        for (const file of filesToCopy) {
+          fs.copyFileSync(resolve(__dirname, file), resolve(__dirname, 'dist', file))
+        }
+      }
+    }
+  ]
+})
