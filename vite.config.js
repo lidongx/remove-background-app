@@ -4,6 +4,16 @@ import fs from 'fs'
 
 export default defineConfig({
   base: '/',
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'sitemap.xml',
+          dest: '' // 复制到 dist 根目录
+        }
+      ]
+    })
+  ],
   build: {
     outDir: 'dist',
     sourcemap: false,
